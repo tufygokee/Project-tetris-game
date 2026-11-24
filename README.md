@@ -23,7 +23,13 @@ Melalui proyek ini, mahasiswa dapat memahami penerapan konsep dasar pemrograman 
 
 ---  
 ## 2. Keunggulan Game  
-* Ringan dan Berjalan Langsung di Terminal (Tanpa GUI): Dibangun menggunakan pustaka ncurses, game dapat dijalankan secara interaktif di terminal Linux maupun WSL tanpa memerlukan lingkungan grafis (GUI) atau mesin game yang berat. 
+* Ringan dan Berjalan Langsung di Terminal (Tanpa GUI): Dibangun menggunakan pustaka ncurses, game dapat dijalankan secara interaktif di terminal Linux maupun WSL tanpa memerlukan lingkungan grafis (GUI) atau mesin game yang berat.
+* ​Kontrol Ganda & Bebas Lag: Mendukung tombol panah sekaligus W/A/S/D. Fungsi timeout(50) menjaga pergerakan dan putaran balok tetap instan tanpa antrean perintah yang menumpuk setelah tombol dilepas.
+* Warna Balok Acak yang Menetap: Setiap balok baru diundi dengan 7 warna dasar ncurses berlatar hitam (COLOR_PAIR). Warna tersebut tersimpan di matriks papan agar tetap menempel setelah balok mendarat.
+* Menu Utama Dinamis: Menggunakan kotak berbingkai (newwin & box), efek sorotan (A_REVERSE), serta navigasi melingkar. Opsi "Main Lagi" hanya muncul otomatis jika riwayat pemain sudah tersimpan di file data_pemain.txt.
+* Selebrasi Rekor Baru: Saat pemain melampaui rekor tertinggi, layar Game Over menampilkan animasi ketik huruf demi huruf berwarna kuning memakai usleep() dan mengubah teks skor akhir menjadi kuning.
+* ​Keluar Bersih Tanpa Error: Menekan tombol q atau Q akan menjalankan endwin() untuk menutup mode ncurses dengan aman, sehingga tampilan terminal kembali normal.
+  
 
 
 
