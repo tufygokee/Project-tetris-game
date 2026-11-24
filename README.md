@@ -5,10 +5,10 @@ Game tetris berbasis terminal ncurses c++
 1.[Latar Belakang & Studi Kasus](#-latar-belakang--studi-kasus)  
 2.[Keunggulan Game](#-keunggulan-game)    
 3.[Prasyarat & Instalasi](#-prasyarat--instalasi)  
-4.[Cara Kompilasi](#4-cara-kompilasi)  
-5.[Kontrol Permainan](#5-kontrol-permainan)  
-6.[Aset & File Eksternal](#6-aset--file-eksternal)  
-7.[Credits](#7-credits)
+4.[Cara Kompilasi](#-cara-kompilasi)  
+5.[Kontrol Permainan](#-kontrol-permainan)  
+6.[Aset & File Eksternal](#-aset--file-eksternal)  
+7.[Credits](#-credits)
 
 ---
 
@@ -39,9 +39,19 @@ Pastikan lingkungan pengembangan memiliki:
 * - *Library Ncurses:* Paket pengembangan libncurses-dev yang terinstal di Linux / WSL.
 Instalasi di WSL (Ubuntu/Debian)
 Jika g++ atau ncurses belum terpasang di WSL, jalankan perintah berikut di terminal WSL:
-```bash
+```bash```
 sudo apt update
 sudo apt install g++ libncurses-dev
+
+---
+
+## 💎 Cara Kompilasi  
+Buka terminal direktori proyek,lalu jalankan :
+```bash
+g++ main.cpp -o main -lncurses && ./main
+```
+---
+
 
 
 
