@@ -87,3 +87,22 @@ int jumlahData = 0;
 
 string namaPemain = "";      // Nama pemain yang sedang bermain
 string pemainTerakhir = "";  // Nama pemain terakhir dari file .txt
+
+/*
+ =====================================================================
+ BAGIAN 2: PENGATURAN WARNA NCURSES (ANIMASI TEKS)
+ =====================================================================
+ */
+
+void aturWarna() {
+    start_color(); // Wajib dipanggil sebelum membuat pasangan warna
+
+    // 7 pasangan warna dasar berlatar hitam untuk balok & tampilan menu
+    init_pair(1, COLOR_RED, COLOR_BLACK);     // Merah
+    init_pair(2, COLOR_GREEN, COLOR_BLACK);   // Hijau
+    init_pair(3, COLOR_YELLOW, COLOR_BLACK);  // Kuning (Emas/Perunggu/Rekor)
+    init_pair(4, COLOR_BLUE, COLOR_BLACK);    // Biru
+    init_pair(5, COLOR_MAGENTA, COLOR_BLACK); // Ungu
+    init_pair(6, COLOR_CYAN, COLOR_BLACK);    // Biru muda (Judul/Bingkai)
+    init_pair(7, COLOR_WHITE, COLOR_BLACK);   // Putih (Silver/Teks biasa)
+}
