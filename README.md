@@ -22,7 +22,7 @@ Program menggunakan array dua dimensi untuk papan permainan, fungsi untuk mengat
 Melalui proyek ini, mahasiswa dapat memahami penerapan konsep dasar pemrograman C++ dalam pembuatan sebuah permainan sederhana.
 
 ---  
-## :star: Keunggulan Game  
+## 👾 Keunggulan Game  
 * Ringan dan Berjalan Langsung di Terminal (Tanpa GUI): Dibangun menggunakan pustaka ncurses, game dapat dijalankan secara interaktif di terminal Linux maupun WSL tanpa memerlukan lingkungan grafis (GUI) atau mesin game yang berat.
 * ​Kontrol Ganda & Bebas Lag: Mendukung tombol panah sekaligus W/A/S/D. Fungsi timeout(50) menjaga pergerakan dan putaran balok tetap instan tanpa antrean perintah yang menumpuk setelah tombol dilepas.
 * Warna Balok Acak yang Menetap: Setiap balok baru diundi dengan 7 warna dasar ncurses berlatar hitam (COLOR_PAIR). Warna tersebut tersimpan di matriks papan agar tetap menempel setelah balok mendarat.
@@ -32,7 +32,7 @@ Melalui proyek ini, mahasiswa dapat memahami penerapan konsep dasar pemrograman 
   
 ---
 
-## :rocket: Prasyarat & Instalasi  
+## 🌟 Prasyarat & Instalasi  
 Pastikan lingkungan pengembangan memiliki:  
 * *OS:* Linux (Ubuntu/Debian/lainnya) atau *Windows dengan WSL (Windows Subsystem for Linux)*, karena program menggunakan pustaka <ncurses.h> dan <unistd.h> (POSIX).
 * *Compiler C++:* g++ (GNU C++ Compiler).
