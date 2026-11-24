@@ -3,7 +3,7 @@ Game tetris berbasis terminal ncurses c++
 ---
 ## Daftar Isi  
 1.[Latar Belakang & Studi Kasus](#-latar-belakang--studi-kasus)  
-2.[Fitur Utama](#-fitur-utama)    
+2.[Keunggulan Game](#-Keunggulan-Game)    
 3.[Prasyarat & Instalasi](#-prasyarat--instalasi)  
 4.[Cara Kompilasi](#-cara-kompilasi)  
 5.[Kontrol Permainan](#-kontrol-permainan)  
@@ -21,7 +21,11 @@ Proyek ini membahas pembuatan permainan Tetris berbasis terminal. Pemain dapat m
 Program menggunakan array dua dimensi untuk papan permainan, fungsi untuk mengatur jalannya game, serta percabangan dan perulangan untuk mengatur pergerakan dan mendeteksi tabrakan. Setiap baris yang berhasil dipenuhi akan dihapus dan menghasilkan tambahan 100 poin. Permainan berakhir ketika balok baru tidak dapat ditempatkan lagi.
 Melalui proyek ini, mahasiswa dapat memahami penerapan konsep dasar pemrograman C++ dalam pembuatan sebuah permainan sederhana.
 
----
+---  
+## 2. Keunggulan Game  
+* **Ringan dan Berjalan Langsung di Terminal (Tanpa GUI): Dibangun menggunakan pustaka ncurses, game dapat dijalankan secara interaktif di terminal Linux maupun WSL tanpa memerlukan lingkungan grafis (GUI) atau mesin game yang berat. 
+
+
 
 
 
