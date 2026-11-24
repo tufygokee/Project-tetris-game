@@ -3,13 +3,12 @@ Game tetris berbasis terminal ncurses c++
 ---
 ## Daftar Isi  
 1.[Latar Belakang & Studi Kasus](#-latar-belakang--studi-kasus)  
-2.[Fitur Utama](#-fitur-utama)  
-3.[Struktur Kode](#-struktur-kode)  
-4.[Prasyarat & Instalasi](#-prasyarat--instalasi)  
-5.[Cara Kompilasi](#-cara-kompilasi)  
-6.[Kontrol Permainan](#-kontrol-permainan)  
-7.[Aset & File Eksternal](#-aset--file-eksternal)  
-8.[Credits](#-credits)
+2.[Fitur Utama](#-fitur-utama)    
+3.[Prasyarat & Instalasi](#-prasyarat--instalasi)  
+4.[Cara Kompilasi](#-cara-kompilasi)  
+5.[Kontrol Permainan](#-kontrol-permainan)  
+6.[Aset & File Eksternal](#-aset--file-eksternal)  
+7.[Credits](#-credits)
 
 ---
 
