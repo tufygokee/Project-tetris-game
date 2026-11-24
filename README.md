@@ -7,8 +7,7 @@ Game tetris berbasis terminal ncurses c++
 3.[Prasyarat & Instalasi](#-prasyarat--instalasi)  
 4.[Cara Kompilasi](#-cara-kompilasi)  
 5.[Kontrol Permainan](#-kontrol-permainan)  
-6.[Aset & File Eksternal](#-aset--file-eksternal)  
-7.[Credits](#-credits)
+6.[Credits](#-credits)  
 
 ---
 
@@ -61,5 +60,16 @@ g++ main.cpp -o main -lncurses && ./main
 | Turun cepat | S/Panah bawah    |
 | Keluar game | Q                |
 
+---
+
+## 📝 Credits
+Universitas Lampung
+| Nama              | NPM        |
+|-------------------|------------|
+| Dwantara Effendy  | 2617051047 |
+| Sevinna Vierlyani | 2617051034 |
+| Suci Widianti     | 2617051013 |
+
+---
 
 
