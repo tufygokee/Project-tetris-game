@@ -30,7 +30,18 @@ Melalui proyek ini, mahasiswa dapat memahami penerapan konsep dasar pemrograman 
 * Selebrasi Rekor Baru: Saat pemain melampaui rekor tertinggi, layar Game Over menampilkan animasi ketik huruf demi huruf berwarna kuning memakai usleep() dan mengubah teks skor akhir menjadi kuning.
 * ​Keluar Bersih Tanpa Error: Menekan tombol q atau Q akan menjalankan endwin() untuk menutup mode ncurses dengan aman, sehingga tampilan terminal kembali normal.
   
+---
 
+## 3. Prasyarat & Instalasi  
+Pastikan lingkungan pengembangan memiliki:  
+* *OS:* Linux (Ubuntu/Debian/lainnya) atau *Windows dengan WSL (Windows Subsystem for Linux)*, karena program menggunakan pustaka <ncurses.h> dan <unistd.h> (POSIX).
+* *Compiler C++:* g++ (GNU C++ Compiler).
+* - *Library Ncurses:* Paket pengembangan libncurses-dev yang terinstal di Linux / WSL.
+Instalasi di WSL (Ubuntu/Debian)
+Jika g++ atau ncurses belum terpasang di WSL, jalankan perintah berikut di terminal WSL:
+```bash
+sudo apt update
+sudo apt install g++ libncurses-dev
 
 
 
