@@ -12,7 +12,7 @@ Game tetris berbasis terminal ncurses c++
 
 ---
 
-## 1. Latar Belakang & Studi Kasus  
+## :video_game: 1. Latar Belakang & Studi Kasus  
 Latar Belakang :
 Pengembangan game Tetris berbasis teks ini menggunakan bahasa C++ dan pustaka ncurses untuk mengimplementasikan logika pemrograman terstruktur. Dengan memanfaatkan matriks ukuran 20 \times 10 (papan) serta array 3 dimensi untuk 7 variasi bentuk balok (bentuk), proyek ini bertujuan untuk melatih pemahaman mengenai manipulasi array multidimensi, algoritma logika spasial, dan pengelolaan antarmuka terminal interaktif secara real-time. 
 
@@ -22,7 +22,7 @@ Program menggunakan array dua dimensi untuk papan permainan, fungsi untuk mengat
 Melalui proyek ini, mahasiswa dapat memahami penerapan konsep dasar pemrograman C++ dalam pembuatan sebuah permainan sederhana.
 
 ---  
-## 2. Keunggulan Game  
+## :star: 2. Keunggulan Game  
 * Ringan dan Berjalan Langsung di Terminal (Tanpa GUI): Dibangun menggunakan pustaka ncurses, game dapat dijalankan secara interaktif di terminal Linux maupun WSL tanpa memerlukan lingkungan grafis (GUI) atau mesin game yang berat.
 * ​Kontrol Ganda & Bebas Lag: Mendukung tombol panah sekaligus W/A/S/D. Fungsi timeout(50) menjaga pergerakan dan putaran balok tetap instan tanpa antrean perintah yang menumpuk setelah tombol dilepas.
 * Warna Balok Acak yang Menetap: Setiap balok baru diundi dengan 7 warna dasar ncurses berlatar hitam (COLOR_PAIR). Warna tersebut tersimpan di matriks papan agar tetap menempel setelah balok mendarat.
@@ -32,7 +32,7 @@ Melalui proyek ini, mahasiswa dapat memahami penerapan konsep dasar pemrograman 
   
 ---
 
-## 3. Prasyarat & Instalasi  
+## :rocket: 3. Prasyarat & Instalasi  
 Pastikan lingkungan pengembangan memiliki:  
 * *OS:* Linux (Ubuntu/Debian/lainnya) atau *Windows dengan WSL (Windows Subsystem for Linux)*, karena program menggunakan pustaka <ncurses.h> dan <unistd.h> (POSIX).
 * *Compiler C++:* g++ (GNU C++ Compiler).
