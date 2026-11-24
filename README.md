@@ -52,7 +52,16 @@ g++ main.cpp -o main -lncurses && ./main
 ```
 ---
 
-
+## 🎮 Kontrol Permainan
+| Aksi      |
+|-----------|
+|           |
+|           |
+|           |
+|
+|
+|
+|
 
 
 
