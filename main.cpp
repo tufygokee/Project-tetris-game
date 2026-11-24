@@ -106,3 +106,82 @@ void aturWarna() {
     init_pair(6, COLOR_CYAN, COLOR_BLACK);    // Biru muda (Judul/Bingkai)
     init_pair(7, COLOR_WHITE, COLOR_BLACK);   // Putih (Silver/Teks biasa)
 }
+/*
+ =====================================================================
+ BAGIAN 3: OPERASI FILE TEXT "data_pemain.txt" (FILE TEXT)
+ =====================================================================
+ */
+
+/*
+ Membaca seluruh data dari "data_pemain.txt" ke dalam array.
+ Format isi file per pemain adalah 2 baris:
+   Baris 1: Nama Pemain (bisa pakai spasi/simbol)
+   Baris 2: Skor (angka bulat)
+ */
+void muatData() {
+    jumlahData = 0;
+    pemainTerakhir = "";
+
+    ifstream fileBaca;
+    fileBaca.open("data_pemain.txt");
+
+    // Jika file belum ada, langsung keluar (jumlahData tetap 0)
+    if (fileBaca.fail()) {
+        return;
+    }
+
+    string nama;
+    int nilaiSkor;
+
+    // Baca terus selama masih ada baris dan belum melebihi 1000 data
+    while (jumlahData < MAX_DATA && getline(fileBaca, nama)) {
+        if (nama == "") {
+            continue; // Lewati jika ada baris kosong
+        }
+
+        if (fileBaca >> nilaiSkor) {
+            fileBaca.ignore(); // Membuang sisa tombol Enter setelah angka skor
+
+            daftarNama[jumlahData] = nama;
+            daftarSkor[jumlahData] = nilaiSkor;
+            pemainTerakhir = nama;
+            jumlahData++;
+        }
+    }
+
+    fileBaca.close(); // Tutup file setelah selesai dibaca
+}
+
+/*
+ Menyimpan 1 data pemain baru ke bagian paling bawah "data_pemain.txt".
+ Memakai ios::app agar data pemain yang sudah ada tidak terhapus.
+ */
+void simpanData(string nama, int skorBaru) {
+    muatData(); // Perbarui jumlahData dulu agar akurat
+
+    // Jangan simpan jika kapasitas array 1000 data sudah penuh
+    if (jumlahData >= MAX_DATA) {
+        return;
+    }
+
+    ofstream fileTulis;
+    fileTulis.open("data_pemain.txt", ios::app);
+
+    if (!fileTulis.fail()) {
+        fileTulis << nama << endl;
+        fileTulis << skorBaru << endl;
+        fileTulis.close();
+    }
+}
+
+// Mencari nilai skor paling tinggi dari seluruh data yang tersimpan
+int cariSkorTertinggi() {
+    int tertinggi = 0;
+    for (int i = 0; i < jumlahData; i++) {
+        if (daftarSkor[i] > tertinggi) {
+            tertinggi = daftarSkor[i];
+        }
+    }
+    return tertinggi;
+}
+
