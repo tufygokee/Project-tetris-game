@@ -53,15 +53,13 @@ g++ main.cpp -o main -lncurses && ./main
 ---
 
 ## 🎮 Kontrol Permainan
-| Aksi      |
-|-----------|
-|           |
-|           |
-|           |
-|
-|
-|
-|
+| Aksi        | Tombol Keyboard  |  
+|-------------|------------------|
+| Putar balok | W/Panah atas     |
+| Geser Kanan | S/Panah kanan    |
+| Geser Kiri  | A/Panah kiri     |
+| Turun cepat | S/Panah bawah    |
+| Keluar game | Q                |
 
 
 
