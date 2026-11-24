@@ -1,13 +1,13 @@
 # Project-tetris-game  
 Game tetris berbasis terminal ncurses c++  
 ## Daftar Isi  
-1.[Latar Belakang & Studi Kasus](#Link)
-2.[Fitur Utama](#Link)
-3.[Struktur Kode](#Link)
-4.[Prasyarat & Instalasi](#Link)
-5.[Cara Kompilasi](#Link)
-6.[Kontrol Permainan](#Link)
-7.[Aset & File Eksternal](#Link)
+1.[Latar Belakang & Studi Kasus](#Link)  
+2.[Fitur Utama](#Link)  
+3.[Struktur Kode](#Link)  
+4.[Prasyarat & Instalasi](#Link)  
+5.[Cara Kompilasi](#Link)  
+6.[Kontrol Permainan](#Link)  
+7.[Aset & File Eksternal](#Link)  
 8.[Credits](#Link)  
 
 Latar Belakang  
