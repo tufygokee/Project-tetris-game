@@ -23,7 +23,7 @@ Melalui proyek ini, mahasiswa dapat memahami penerapan konsep dasar pemrograman 
 
 ---  
 ## 2. Keunggulan Game  
-* **Ringan dan Berjalan Langsung di Terminal (Tanpa GUI): Dibangun menggunakan pustaka ncurses, game dapat dijalankan secara interaktif di terminal Linux maupun WSL tanpa memerlukan lingkungan grafis (GUI) atau mesin game yang berat. 
+* Ringan dan Berjalan Langsung di Terminal (Tanpa GUI): Dibangun menggunakan pustaka ncurses, game dapat dijalankan secara interaktif di terminal Linux maupun WSL tanpa memerlukan lingkungan grafis (GUI) atau mesin game yang berat. 
 
 
 
