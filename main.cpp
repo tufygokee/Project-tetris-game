@@ -169,7 +169,10 @@ void gambar() {
             mvaddch(i+2, j*2+5, simbol);
         }
     }
-
+    mvprintw(23, 2, "A/D: Gerak | W: Putar | S: Turun");
+    mvprintw(24, 2, "Q: Keluar");
+    refresh();
+}
 
     int main() {
     srand(time(0));
@@ -241,7 +244,3 @@ void gambar() {
     return 0;
 }
 
-    mvprintw(23, 2, "A/D: Gerak | W: Putar | S: Turun");
-    mvprintw(24, 2, "Q: Keluar");
-    refresh();
-}
