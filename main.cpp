@@ -753,73 +753,83 @@ void tampilPapanPeringkat() {
  */
 
 bool inputNamaBaru() {
+    char bufferNama[31]; // Menampung maks 30 karakter + penutup teks '\0'
     string namaInput = "";
+    bool kosong = false;
 
-    /*
-     Tutup layar ncurses sementara agar getline(cin, ...) bisa membaca
-     semua karakter (termasuk spasi dan simbol) dengan normal di terminal.
-     */
-    endwin();
-
-    cout << "\n==========================================" << endl;
-    cout << "          MULAI BARU - TETRIS             " << endl;
-    cout << "==========================================" << endl;
-
-    do {
-        cout << "Masukkan nama pemain (maks 30 karakter): ";
-        getline(cin, namaInput);
-
-        if (namaInput == "") {
-            cout << "Nama tidak boleh kosong! Silakan isi." << endl;
-        }
-    } while (namaInput == "");
-
-    // Batasi panjang nama maksimal 30 karakter
-    if ((int)namaInput.length() > 30) {
-        namaInput = namaInput.substr(0, 30);
-    }
-
-    // Masuk kembali ke tampilan ncurses untuk menampilkan tombol MULAI
     clear();
     refresh();
-    cbreak();
-    noecho();
-    curs_set(0);
-    keypad(stdscr, TRUE);
 
-    WINDOW *mulaiWin = newwin(10, 46, 5, 15);
-    keypad(mulaiWin, TRUE);
+    WINDOW *inputWin = newwin(11, 46, 5, 15);
+    keypad(inputWin, TRUE);
 
+    // 1. Input nama langsung di dalam kotak ncurses (tidak keluar ke terminal)
+    do {
+        wclear(inputWin);
+        box(inputWin, 0, 0);
+
+        wattron(inputWin, COLOR_PAIR(6) | A_BOLD);
+        mvwprintw(inputWin, 1, 13, "MULAI BARU - TETRIS");
+        wattroff(inputWin, COLOR_PAIR(6) | A_BOLD);
+
+        mvwprintw(inputWin, 3, 4, "Masukkan nama (maks 30 karakter):");
+        mvwprintw(inputWin, 5, 4, "> ");
+
+        if (kosong) {
+            wattron(inputWin, COLOR_PAIR(1) | A_BOLD);
+            mvwprintw(inputWin, 7, 4, "Nama tidak boleh kosong!");
+            wattroff(inputWin, COLOR_PAIR(1) | A_BOLD);
+        }
+
+        mvwprintw(inputWin, 9, 4, "Ketik nama lalu tekan [Enter]");
+        wrefresh(inputWin);
+
+        // Nyalakan echo dan kursor agar ketikan tampil (Modul Pertemuan 14)
+        echo();
+        curs_set(1);
+
+        // Baca teks maksimal 30 karakter (huruf, spasi, simbol diterima)
+        mvwgetnstr(inputWin, 5, 6, bufferNama, 30);
+
+        // Matikan kembali echo dan kursor setelah selesai mengetik
+        noecho();
+        curs_set(0);
+
+        namaInput = bufferNama;
+        kosong = (namaInput == "");
+    } while (kosong);
+
+    // 2. Layar konfirmasi tombol MULAI dan KEMBALI di kotak yang sama
     const char *tombolOpsi[2] = {" MULAI ", " KEMBALI "};
     int pilih = 0; // Langsung menyorot tombol MULAI
 
     while (true) {
-        wclear(mulaiWin);
-        box(mulaiWin, 0, 0);
+        wclear(inputWin);
+        box(inputWin, 0, 0);
 
-        wattron(mulaiWin, COLOR_PAIR(6) | A_BOLD);
-        mvwprintw(mulaiWin, 1, 14, "SIAP BERMAIN?");
-        wattroff(mulaiWin, COLOR_PAIR(6) | A_BOLD);
+        wattron(inputWin, COLOR_PAIR(6) | A_BOLD);
+        mvwprintw(inputWin, 1, 16, "SIAP BERMAIN?");
+        wattroff(inputWin, COLOR_PAIR(6) | A_BOLD);
 
-        mvwprintw(mulaiWin, 3, 4, "Nama: %s", namaInput.c_str());
+        mvwprintw(inputWin, 3, 4, "Nama: %s", namaInput.c_str());
 
         // Cetak tombol MULAI dan KEMBALI dengan sorotan A_REVERSE
         for (int i = 0; i < 2; i++) {
             if (i == pilih) {
-                wattron(mulaiWin, A_REVERSE | A_BOLD);
+                wattron(inputWin, A_REVERSE | A_BOLD);
             }
-            mvwprintw(mulaiWin, 6, 10 + i * 16, "[%s]", tombolOpsi[i]);
-            wattroff(mulaiWin, A_REVERSE | A_BOLD);
+            mvwprintw(inputWin, 6, 10 + i * 16, "[%s]", tombolOpsi[i]);
+            wattroff(inputWin, A_REVERSE | A_BOLD);
         }
 
-        mvwprintw(mulaiWin, 8, 4, "[Panah Kiri/Kanan] Pilih  [Enter] OK");
-        wrefresh(mulaiWin);
+        mvwprintw(inputWin, 9, 4, "[Panah Kiri/Kanan] Pilih  [Enter] OK");
+        wrefresh(inputWin);
 
-        int ch = wgetch(mulaiWin);
+        int ch = wgetch(inputWin);
         if (ch == KEY_LEFT || ch == KEY_RIGHT) {
             pilih = (pilih == 0) ? 1 : 0; // Tukar sorotan tombol
         } else if (ch == 10 || ch == KEY_ENTER) {
-            delwin(mulaiWin);
+            delwin(inputWin);
             if (pilih == 0) {
                 namaPemain = namaInput;
                 return true;  // Tekan MULAI -> masuk ke game
