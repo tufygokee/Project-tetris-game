@@ -1,4 +1,4 @@
-# Project-tetris-game  
+# Projek-GameTetris
 Game tetris berbasis terminal ncurses c++  
 ---
 ## Daftar Isi  
