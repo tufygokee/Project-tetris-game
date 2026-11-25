@@ -390,7 +390,7 @@ void gambarGame(int rekorLama) {
 
     refresh(); // Tampilkan semua gambar ke layar terminal
 }
-iya
+
 /*
  =====================================================================
  BAGIAN 6: LAYAR GAME OVER & ANIMASI SKOR TERTINGGI
