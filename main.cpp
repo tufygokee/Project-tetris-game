@@ -184,4 +184,347 @@ int cariSkorTertinggi() {
     }
     return tertinggi;
 }
+/*
+ =====================================================================
+ BAGIAN 4: BUBBLE SORT DESCENDING (SORTING)
+ =====================================================================
+ */
+
+/*
+ Mengurutkan papan peringkat dari skor TERBESAR ke TERKECIL.
+ Saat dua skor ditukar, namanya ikut ditukar agar tidak tertukar orangnya.
+ */
+void urutkanBubbleSort() {
+    for (int i = 0; i < jumlahData - 1; i++) {
+        for (int j = 0; j < jumlahData - i - 1; j++) {
+            // Tanda '<' dipakai untuk mengurutkan dari besar ke kecil
+            if (daftarSkor[j] < daftarSkor[j + 1]) {
+                // Tukar skor memakai gelas sementara (tempSkor)
+                int tempSkor = daftarSkor[j];
+                daftarSkor[j] = daftarSkor[j + 1];
+                daftarSkor[j + 1] = tempSkor;
+
+                // Tukar juga namanya memakai gelas sementara (tempNama)
+                string tempNama = daftarNama[j];
+                daftarNama[j] = daftarNama[j + 1];
+                daftarNama[j + 1] = tempNama;
+            }
+        }
+    }
+}
+/*
+ =====================================================================
+ BAGIAN 5: LOGIKA UTAMA GAME TETRIS
+ =====================================================================
+ */
+
+// Mengosongkan papan dan mereset skor sebelum permainan baru dimulai
+void resetPapan() {
+    for (int i = 0; i < TINGGI; i++) {
+        for (int j = 0; j < LEBAR; j++) {
+            papan[i][j] = 0;
+        }
+    }
+    skor = 0;
+}
+
+// Membuat balok baru secara acak beserta warna acaknya (1..7)
+void balokBaru() {
+    int jenis = rand() % 7;
+
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            balok[i][j] = bentuk[jenis][i][j];
+        }
+    }
+
+    warnaBalok = (rand() % 7) + 1; // Pilih warna acak ID 1 sampai 7
+    x = LEBAR / 2 - 2;             // Muncul di tengah atas papan
+    y = 0;
+}
+
+// Mengecek apakah posisi tujuan (nx, ny) menabrak dinding, lantai, atau balok lain
+bool tabrakan(int nx, int ny, int b[4][4]) {
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            if (b[i][j] != 0) {
+                int px = nx + j;
+                int py = ny + i;
+
+                // Cek batas dinding kiri, dinding kanan, dan lantai
+                if (px < 0 || px >= LEBAR || py >= TINGGI) {
+                    return true;
+                }
+
+                // Cek tabrakan dengan balok yang sudah menumpuk di papan
+                if (py >= 0 && papan[py][px] != 0) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+// Memutar balok 90 derajat searah jarum jam jika tidak menabrak
+void putarBalok() {
+    int hasil[4][4] = {0};
+
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            hasil[j][3 - i] = balok[i][j];
+        }
+    }
+
+    if (!tabrakan(x, y, hasil)) {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                balok[i][j] = hasil[i][j];
+            }
+        }
+    }
+}
+
+// Mengunci balok yang sudah mendarat ke dalam array papan beserta warnanya
+void kunciBalok() {
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            if (balok[i][j] != 0) {
+                if (y + i >= 0 && y + i < TINGGI) {
+                    papan[y + i][x + j] = warnaBalok;
+                }
+            }
+        }
+    }
+}
+
+/*
+ Menghapus baris yang penuh (tidak ada angka 0), menurunkan baris di atasnya,
+ lalu menambah skor +100 untuk setiap baris yang berhasil dibersihkan.
+ */
+void hapusBaris() {
+    for (int i = TINGGI - 1; i >= 0; i--) {
+        bool penuh = true;
+
+        for (int j = 0; j < LEBAR; j++) {
+            if (papan[i][j] == 0) {
+                penuh = false;
+                break;
+            }
+        }
+
+        if (penuh) {
+            // Geser semua baris di atasnya turun 1 tingkat
+            for (int k = i; k > 0; k--) {
+                for (int j = 0; j < LEBAR; j++) {
+                    papan[k][j] = papan[k - 1][j];
+                }
+            }
+
+            // Kosongkan baris paling atas
+            for (int j = 0; j < LEBAR; j++) {
+                papan[0][j] = 0;
+            }
+
+            skor += 100;
+            i++; // Cek ulang baris yang sama karena ada baris baru yang turun
+        }
+    }
+}
+
+// Menggambar arena Tetris di kiri dan papan info/kontrol di kanan
+void gambarGame(int rekorLama) {
+    clear();
+
+    // Gambar bingkai arena Tetris (ukuran 20 baris x 10 kolom)
+    attron(COLOR_PAIR(6));
+    mvprintw(1, 2, "+--------------------+");
+    for (int i = 0; i < TINGGI; i++) {
+        mvprintw(2 + i, 2, "|");
+        mvprintw(2 + i, 23, "|");
+    }
+    mvprintw(22, 2, "+--------------------+");
+    attroff(COLOR_PAIR(6));
+
+    // Gambar isi papan dan balok aktif berwarna acak
+    for (int i = 0; i < TINGGI; i++) {
+        for (int j = 0; j < LEBAR; j++) {
+            int warna = papan[i][j]; // 0 jika kosong, 1..7 jika ada balok
+
+            // Cek apakah koordinat (i, j) ditempati balok yang sedang jatuh
+            for (int a = 0; a < 4; a++) {
+                for (int b = 0; b < 4; b++) {
+                    if (balok[a][b] != 0 && i == y + a && j == x + b) {
+                        warna = warnaBalok;
+                    }
+                }
+            }
+
+            if (warna != 0) {
+                // Cetak balok berwarna menggunakan COLOR_PAIR()
+                attron(COLOR_PAIR(warna) | A_BOLD);
+                mvprintw(2 + i, 3 + j * 2, "[]");
+                attroff(COLOR_PAIR(warna) | A_BOLD);
+            } else {
+                // Cetak titik sebagai penanda kotak kosong
+                mvprintw(2 + i, 3 + j * 2, ". ");
+            }
+        }
+    }
+
+    // Panel informasi & kontrol di sebelah kanan papan
+    attron(COLOR_PAIR(6) | A_BOLD);
+    mvprintw(2, 28, "=== TETRIS GAME ===");
+    attroff(COLOR_PAIR(6) | A_BOLD);
+
+    mvprintw(4, 28, "Pemain : %s", namaPemain.c_str());
+    mvprintw(5, 28, "Skor   : %d", skor);
+    mvprintw(6, 28, "Rekor  : %d", rekorLama);
+
+    mvprintw(9, 28, "KONTROL:");
+    mvprintw(10, 28, "A / Panah Kiri  : Geser Kiri");
+    mvprintw(11, 28, "D / Panah Kanan : Geser Kanan");
+    mvprintw(12, 28, "W / Panah Atas  : Putar Balok");
+    mvprintw(13, 28, "S / Panah Bawah : Turun Cepat");
+    mvprintw(14, 28, "Q               : Keluar");
+
+    refresh(); // Tampilkan semua gambar ke layar terminal
+}
+iya
+/*
+ =====================================================================
+ BAGIAN 6: LAYAR GAME OVER & ANIMASI SKOR TERTINGGI
+ =====================================================================
+ */
+
+void tampilGameOver(int skorAkhir, bool rekorBaru) {
+    clear();
+    refresh();
+
+    // Membuat jendela kotak Game Over di tengah layar
+    WINDOW *overWin = newwin(12, 46, 5, 15);
+    box(overWin, 0, 0);
+
+    wattron(overWin, COLOR_PAIR(1) | A_BOLD);
+    mvwprintw(overWin, 2, 18, "GAME OVER!");
+    wattroff(overWin, COLOR_PAIR(1) | A_BOLD);
+
+    mvwprintw(overWin, 4, 4, "Pemain     : %s", namaPemain.c_str());
+    mvwprintw(overWin, 5, 4, "Skor Akhir : %d", skorAkhir);
+    wrefresh(overWin);
+
+    /*
+     Jika pemain memecahkan skor tertinggi (skor > 0 dan di atas rekor lama):
+     1. Muncul animasi tulisan "SKOR TERTINGGI BARU!" warna kuning
+     2. Warna tulisan Skor Akhir ikut berubah menjadi warna kuning
+     */
+    if (rekorBaru) {
+        usleep(300000); // Jeda 0,3 detik sebelum animasi dimulai
+
+        string teksRekor = "*** SKOR TERTINGGI BARU! ***";
+        wattron(overWin, COLOR_PAIR(3) | A_BOLD);
+
+        // Animasi muncul huruf demi huruf menggunakan usleep()
+        for (int i = 0; i < (int)teksRekor.length(); i++) {
+            mvwprintw(overWin, 7, 9 + i, "%c", teksRekor[i]);
+            wrefresh(overWin);
+            usleep(60000); // Jeda 0,06 detik tiap huruf
+        }
+
+        // Ubah warna tulisan Skor Akhir menjadi warna kuning
+        mvwprintw(overWin, 5, 4, "Skor Akhir : %d (TERTINGGI!)", skorAkhir);
+        wattroff(overWin, COLOR_PAIR(3) | A_BOLD);
+        wrefresh(overWin);
+    }
+
+    wattron(overWin, COLOR_PAIR(2));
+    mvwprintw(overWin, 9, 4, "Data disimpan ke data_pemain.txt");
+    wattroff(overWin, COLOR_PAIR(2));
+
+    mvwprintw(overWin, 10, 4, "Tekan tombol apa saja untuk lanjut...");
+    wrefresh(overWin);
+
+    wgetch(overWin); // Tunggu pemain menekan tombol
+    delwin(overWin); // Hapus jendela dari memori
+}
+
+// Menjalankan satu sesi penuh permainan Tetris
+void mulaiGameTetris() {
+    muatData();
+    int rekorLama = cariSkorTertinggi();
+
+    resetPapan();
+    balokBaru();
+
+    /*
+     timeout(50) membuat getch() menunggu maksimal 50 milidetik.
+     Jika pemain menekan panah, langsung diproses detik itu juga
+     sehingga perintah tidak menumpuk saat tombol dilepaskan.
+     */
+    timeout(50);
+
+    int waktu = 0;
+    bool selesai = false;
+
+    while (!selesai) {
+        gambarGame(rekorLama);
+
+        int tombol = getch();
+
+        if (tombol == 'q' || tombol == 'Q') {
+            break;
+        }
+
+        if (tombol == KEY_LEFT || tombol == 'a' || tombol == 'A') {
+            if (!tabrakan(x - 1, y, balok)) {
+                x--;
+            }
+        }
+
+        if (tombol == KEY_RIGHT || tombol == 'd' || tombol == 'D') {
+            if (!tabrakan(x + 1, y, balok)) {
+                x++;
+            }
+        }
+
+        if (tombol == KEY_UP || tombol == 'w' || tombol == 'W') {
+            putarBalok();
+        }
+
+        if (tombol == KEY_DOWN || tombol == 's' || tombol == 'S') {
+            if (!tabrakan(x, y + 1, balok)) {
+                y++;
+            }
+        }
+
+        // Gravitasi: setiap 10 putaran (~0,5 detik), balok turun 1 baris
+        waktu++;
+        if (waktu >= 10) {
+            waktu = 0;
+
+            if (!tabrakan(x, y + 1, balok)) {
+                y++;
+            } else {
+                kunciBalok();
+                hapusBaris();
+                balokBaru();
+
+                // Jika balok baru langsung tabrakan di atas, Game Over
+                if (tabrakan(x, y, balok)) {
+                    selesai = true;
+                }
+            }
+        }
+    }
+
+    // Matikan timeout agar getch() kembali menunggu tombol secara normal
+    timeout(-1);
+
+    // Cek apakah skor pemain kali ini memecahkan rekor tertinggi
+    bool rekorBaru = (skor > 0 && skor > rekorLama);
+
+    // Simpan hasil ke data_pemain.txt lalu tampilkan layar Game Over
+    simpanData(namaPemain, skor);
+    tampilGameOver(skor, rekorBaru);
+}
 
