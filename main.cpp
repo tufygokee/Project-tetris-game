@@ -799,8 +799,8 @@ bool inputNamaBaru() {
         kosong = (namaInput == "");
     } while (kosong);
 
-    // 2. Layar konfirmasi tombol MULAI dan KEMBALI di kotak yang sama
-    const char *tombolOpsi[2] = {" MULAI ", " KEMBALI "};
+    // 2. Layar konfirmasi tombol MULAI dan BATAL di kotak yang sama
+    const char *tombolOpsi[2] = {" MULAI ", " BATAL "};
     int pilih = 0; // Langsung menyorot tombol MULAI
 
     while (true) {
@@ -834,7 +834,7 @@ bool inputNamaBaru() {
                 namaPemain = namaInput;
                 return true;  // Tekan MULAI -> masuk ke game
             } else {
-                return false; // Tekan KEMBALI -> balik ke Menu Utama
+                return false; // Tekan BATAL -> balik ke Menu Utama
             }
         }
     }
