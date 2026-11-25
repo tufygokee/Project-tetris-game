@@ -744,3 +744,88 @@ void tampilPapanPeringkat() {
 
     delwin(rankWin);
 }
+
+
+/*
+ =====================================================================
+ BAGIAN 8: MENU MULAI BARU (INPUT getline() + TOMBOL MULAI)
+ =====================================================================
+ */
+
+bool inputNamaBaru() {
+    string namaInput = "";
+
+    /*
+     Tutup layar ncurses sementara agar getline(cin, ...) bisa membaca
+     semua karakter (termasuk spasi dan simbol) dengan normal di terminal.
+     */
+    endwin();
+
+    cout << "\n==========================================" << endl;
+    cout << "          MULAI BARU - TETRIS             " << endl;
+    cout << "==========================================" << endl;
+
+    do {
+        cout << "Masukkan nama pemain (maks 30 karakter): ";
+        getline(cin, namaInput);
+
+        if (namaInput == "") {
+            cout << "Nama tidak boleh kosong! Silakan isi." << endl;
+        }
+    } while (namaInput == "");
+
+    // Batasi panjang nama maksimal 30 karakter
+    if ((int)namaInput.length() > 30) {
+        namaInput = namaInput.substr(0, 30);
+    }
+
+    // Masuk kembali ke tampilan ncurses untuk menampilkan tombol MULAI
+    clear();
+    refresh();
+    cbreak();
+    noecho();
+    curs_set(0);
+    keypad(stdscr, TRUE);
+
+    WINDOW *mulaiWin = newwin(10, 46, 5, 15);
+    keypad(mulaiWin, TRUE);
+
+    const char *tombolOpsi[2] = {" MULAI ", " KEMBALI "};
+    int pilih = 0; // Langsung menyorot tombol MULAI
+
+    while (true) {
+        wclear(mulaiWin);
+        box(mulaiWin, 0, 0);
+
+        wattron(mulaiWin, COLOR_PAIR(6) | A_BOLD);
+        mvwprintw(mulaiWin, 1, 14, "SIAP BERMAIN?");
+        wattroff(mulaiWin, COLOR_PAIR(6) | A_BOLD);
+
+        mvwprintw(mulaiWin, 3, 4, "Nama: %s", namaInput.c_str());
+
+        // Cetak tombol MULAI dan KEMBALI dengan sorotan A_REVERSE
+        for (int i = 0; i < 2; i++) {
+            if (i == pilih) {
+                wattron(mulaiWin, A_REVERSE | A_BOLD);
+            }
+            mvwprintw(mulaiWin, 6, 10 + i * 16, "[%s]", tombolOpsi[i]);
+            wattroff(mulaiWin, A_REVERSE | A_BOLD);
+        }
+
+        mvwprintw(mulaiWin, 8, 4, "[Panah Kiri/Kanan] Pilih  [Enter] OK");
+        wrefresh(mulaiWin);
+
+        int ch = wgetch(mulaiWin);
+        if (ch == KEY_LEFT || ch == KEY_RIGHT) {
+            pilih = (pilih == 0) ? 1 : 0; // Tukar sorotan tombol
+        } else if (ch == 10 || ch == KEY_ENTER) {
+            delwin(mulaiWin);
+            if (pilih == 0) {
+                namaPemain = namaInput;
+                return true;  // Tekan MULAI -> masuk ke game
+            } else {
+                return false; // Tekan KEMBALI -> balik ke Menu Utama
+            }
+        }
+    }
+}
