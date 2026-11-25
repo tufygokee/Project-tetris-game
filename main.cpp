@@ -829,3 +829,99 @@ bool inputNamaBaru() {
         }
     }
 }
+
+
+/*
+ =====================================================================
+ BAGIAN 9: MENU UTAMA DINAMIS (ANIMASI TEKS + TOMBOL PANAH)
+ =====================================================================
+ */
+
+int tampilMenuUtama() {
+    muatData(); // Cek apakah data_pemain.txt sudah berisi data
+
+    const char *opsi[4];
+    int kodeMenu[4];
+    int jumlahOpsi = 0;
+
+    // Menu 1: Mulai Baru (selalu muncul)
+    opsi[jumlahOpsi] = "Mulai Baru";
+    kodeMenu[jumlahOpsi] = 1;
+    jumlahOpsi++;
+
+    // Menu 2: Main Lagi (HANYA muncul jika data_pemain.txt sudah ada isinya)
+    if (jumlahData > 0) {
+        opsi[jumlahOpsi] = "Main Lagi";
+        kodeMenu[jumlahOpsi] = 2;
+        jumlahOpsi++;
+    }
+
+    // Menu 3: Papan Peringkat (selalu muncul)
+    opsi[jumlahOpsi] = "Papan Peringkat";
+    kodeMenu[jumlahOpsi] = 3;
+    jumlahOpsi++;
+
+    // Menu 4: Keluar (selalu muncul)
+    opsi[jumlahOpsi] = "Keluar";
+    kodeMenu[jumlahOpsi] = 4;
+    jumlahOpsi++;
+
+    clear();
+    refresh();
+
+    WINDOW *menuWin = newwin(12, 36, 4, 20);
+    keypad(menuWin, TRUE);
+
+    int pilihanTerpilih = 0;
+
+    while (true) {
+        wclear(menuWin);
+        box(menuWin, 0, 0);
+
+        wattron(menuWin, COLOR_PAIR(6) | A_BOLD);
+        mvwprintw(menuWin, 1, 9, "=== GAME TETRIS ===");
+        wattroff(menuWin, COLOR_PAIR(6) | A_BOLD);
+
+        // Cetak daftar menu dengan efek sorotan A_REVERSE (MODUUL 14)
+        for (int i = 0; i < jumlahOpsi; i++) {
+            if (i == pilihanTerpilih) {
+                wattron(menuWin, A_REVERSE);
+            }
+            mvwprintw(menuWin, 3 + i, 8, " %-18s ", opsi[i]);
+            wattroff(menuWin, A_REVERSE);
+        }
+
+        mvwprintw(menuWin, 9, 3, "[Panah] Pilih   [Enter] OK");
+        mvwprintw(menuWin, 10, 3, "[Q] Keluar ke Terminal");
+        wrefresh(menuWin);
+
+        int tombol = wgetch(menuWin);
+        switch (tombol) {
+            case KEY_UP:
+                if (pilihanTerpilih == 0) {
+                    pilihanTerpilih = jumlahOpsi - 1;
+                } else {
+                    pilihanTerpilih--;
+                }
+                break;
+
+            case KEY_DOWN:
+                if (pilihanTerpilih == jumlahOpsi - 1) {
+                    pilihanTerpilih = 0;
+                } else {
+                    pilihanTerpilih++;
+                }
+                break;
+
+            case 10:        // Tombol Enter
+            case KEY_ENTER:
+                delwin(menuWin);
+                return kodeMenu[pilihanTerpilih];
+
+            case 'q':
+            case 'Q':
+                delwin(menuWin);
+                return 4; // Keluar
+        }
+    }
+}
