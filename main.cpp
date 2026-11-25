@@ -1,4 +1,3 @@
-#include <iostream>   // Untuk cout, cin, dan getline()
 #include <fstream>    // Untuk membaca & menulis data_pemain.txt
 #include <string>     // Untuk tipe data string
 #include <ncurses.h>  // Library tampilan terminal ncurses
@@ -748,7 +747,7 @@ void tampilPapanPeringkat() {
 
 /*
  =====================================================================
- BAGIAN 8: MENU MULAI BARU (INPUT getline() + TOMBOL MULAI)
+ BAGIAN 8: MENU MULAI BARU (INPUT NAMA + TOMBOL MULAI)
  =====================================================================
  */
 
