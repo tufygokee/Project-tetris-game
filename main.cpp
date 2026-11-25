@@ -528,3 +528,219 @@ void mulaiGameTetris() {
     tampilGameOver(skor, rekorBaru);
 }
 
+
+/*
+ =====================================================================
+ BAGIAN 7: POPUP PENCARIAN (SEQUENTIAL SEARCH) & PAPAN PERINGKAT
+ =====================================================================
+ */
+
+/*
+ Popup pencarian di atas Papan Peringkat:
+ - Awalnya kosong bertuliskan "cari nama pemain"
+ - Hilang saat pemain mengetik karakter
+ - Jika dihapus habis, muncul tulisan "masukan nama pemain"
+ - Tekan Enter untuk mencari dengan Sequential Search (Modul 7)
+ - Tekan 'c' kedua kalinya pada tampilan hasil untuk menutup popup
+ */
+void popupCariPemain() {
+    WINDOW *popupWin = newwin(10, 48, 6, 14);
+    keypad(popupWin, TRUE);
+
+    string kataCari = "";
+    bool pernahKetik = false;  // Penanda apakah pemain pernah mengetik
+    bool sudahCari = false;    // false = mode mengetik, true = tampil hasil
+    bool ketemu = false;
+    int indeksKetemu = -1;
+
+    while (true) {
+        wclear(popupWin);
+        box(popupWin, 0, 0);
+
+        wattron(popupWin, COLOR_PAIR(6) | A_BOLD);
+        mvwprintw(popupWin, 1, 16, "CARI PEMAIN");
+        wattroff(popupWin, COLOR_PAIR(6) | A_BOLD);
+
+        // Kotak masukan nama pemain (lebar 30 karakter)
+        mvwprintw(popupWin, 3, 3, "Nama: [");
+        mvwprintw(popupWin, 3, 40, "]");
+
+        if (kataCari != "") {
+            // Cetak teks yang diketik pengguna
+            mvwprintw(popupWin, 3, 10, "%s", kataCari.c_str());
+        } else {
+            // Tampilkan teks petunjuk redup (placeholder)
+            wattron(popupWin, COLOR_PAIR(7) | A_DIM);
+            if (!pernahKetik) {
+                mvwprintw(popupWin, 3, 10, "cari nama pemain");
+            } else {
+                mvwprintw(popupWin, 3, 10, "masukan nama pemain");
+            }
+            wattroff(popupWin, COLOR_PAIR(7) | A_DIM);
+        }
+
+        if (!sudahCari) {
+            // Mode Mengetik
+            mvwprintw(popupWin, 5, 3, "Ketik nama lalu tekan [Enter] untuk cari.");
+            mvwprintw(popupWin, 8, 3, "[Enter] Cari   |   [ESC] Batal");
+            curs_set(1); // Munculkan kursor ketik
+            wmove(popupWin, 3, 10 + (int)kataCari.length());
+        } else {
+            // Mode Hasil Pencarian
+            curs_set(0); // Sembunyikan kursor
+
+            if (ketemu) {
+                wattron(popupWin, COLOR_PAIR(2) | A_BOLD);
+                mvwprintw(popupWin, 5, 3, "Ditemukan di Peringkat #%d:",
+                          indeksKetemu + 1);
+                wattroff(popupWin, COLOR_PAIR(2) | A_BOLD);
+                mvwprintw(popupWin, 6, 3, "%s  |  Skor: %d",
+                          daftarNama[indeksKetemu].c_str(),
+                          daftarSkor[indeksKetemu]);
+            } else {
+                wattron(popupWin, COLOR_PAIR(1) | A_BOLD);
+                mvwprintw(popupWin, 5, 3, "Pemain tidak ditemukan!");
+                wattroff(popupWin, COLOR_PAIR(1) | A_BOLD);
+            }
+
+            mvwprintw(popupWin, 8, 3, "[C] Tutup Popup   |   [Enter] Cari Lagi");
+        }
+
+        wrefresh(popupWin);
+
+        int ch = wgetch(popupWin);
+
+        // Tombol ESC (kode 27) dapat menutup popup kapan saja
+        if (ch == 27) {
+            break;
+        }
+
+        if (!sudahCari) {
+            if (ch == 10 || ch == KEY_ENTER) {
+                /*
+                 SEQUENTIAL SEARCH :
+                 Memeriksa array daftarNama satu per satu dari indeks 0
+                 sampai jumlahData - 1.
+                 */
+                ketemu = false;
+                indeksKetemu = -1;
+
+                if (kataCari != "") {
+                    for (int i = 0; i < jumlahData; i++) {
+                        // Cek apakah nama sama persis atau mengandung kataCari
+                        if (daftarNama[i].find(kataCari) != string::npos) {
+                            ketemu = true;
+                            indeksKetemu = i;
+                            break; // Berhenti begitu ketemu peringkat tertinggi
+                        }
+                    }
+                }
+                sudahCari = true;
+            } else if (ch == KEY_BACKSPACE || ch == 127 || ch == 8) {
+                // Hapus 1 karakter terakhir saat Backspace ditekan
+                if (kataCari.length() > 0) {
+                    kataCari.pop_back();
+                }
+            } else if (ch >= 32 && ch <= 126) {
+                // Tambahkan karakter yang diketik (maksimal 30 karakter)
+                if ((int)kataCari.length() < 30) {
+                    kataCari += (char)ch;
+                    pernahKetik = true;
+                }
+            }
+        } else {
+            // Menekan 'c' kedua kalinya menutup popup
+            if (ch == 'c' || ch == 'C') {
+                break;
+            } else if (ch == 10 || ch == KEY_ENTER) {
+                // Ulangi pencarian baru
+                sudahCari = false;
+                kataCari = "";
+            }
+        }
+    }
+
+    curs_set(0);
+    delwin(popupWin);
+}
+
+// Menampilkan tabel Papan Peringkat dengan Bubble Sort & warna podium
+void tampilPapanPeringkat() {
+    muatData();
+    urutkanBubbleSort(); // Urutkan dari skor tertinggi ke terendah
+
+    WINDOW *rankWin = newwin(18, 56, 2, 10);
+    keypad(rankWin, TRUE);
+
+    int mulaiBaris = 0; // Untuk menggulir jika data lebih dari 10
+
+    while (true) {
+        clear();
+        refresh();
+        wclear(rankWin);
+        box(rankWin, 0, 0);
+
+        wattron(rankWin, COLOR_PAIR(6) | A_BOLD);
+        mvwprintw(rankWin, 1, 17, "PAPAN PERINGKAT TETRIS");
+        wattroff(rankWin, COLOR_PAIR(6) | A_BOLD);
+
+        mvwprintw(rankWin, 3, 2, "RANK  NAMA PEMAIN                       SKOR");
+        mvwprintw(rankWin, 4, 2, "----------------------------------------------------");
+
+        if (jumlahData == 0) {
+            mvwprintw(rankWin, 8, 12, "Belum ada data di data_pemain.txt");
+        } else {
+            // Tampilkan maksimal 10 data per layar
+            for (int baris = 0; baris < 10; baris++) {
+                int idx = mulaiBaris + baris;
+                if (idx >= jumlahData) {
+                    break;
+                }
+
+                // Warna podium berlatar hitam untuk posisi 1, 2, dan 3
+                if (idx == 0) {
+                    // Posisi 1: Emas (Kuning terang tebal)
+                    wattron(rankWin, COLOR_PAIR(3) | A_BOLD);
+                } else if (idx == 1) {
+                    // Posisi 2: Silver (Putih terang tebal)
+                    wattron(rankWin, COLOR_PAIR(7) | A_BOLD);
+                } else if (idx == 2) {
+                    // Posisi 3: Perunggu / Coklat (Kuning redup)
+                    wattron(rankWin, COLOR_PAIR(3) | A_DIM);
+                } else {
+                    // Posisi 4 ke bawah: Putih biasa
+                    wattron(rankWin, COLOR_PAIR(7));
+                }
+
+                mvwprintw(rankWin, 5 + baris, 2, "#%-4d %-30s %8d",
+                          idx + 1,
+                          daftarNama[idx].c_str(),
+                          daftarSkor[idx]);
+
+                // Matikan semua atribut agar tidak bocor ke baris selanjutnya
+                wattroff(rankWin, COLOR_PAIR(3) | COLOR_PAIR(7) | A_BOLD | A_DIM);
+            }
+        }
+
+        mvwprintw(rankWin, 16, 2, "[C] Cari   |   [Panah] Gulir   |   [Q] Kembali");
+        wrefresh(rankWin);
+
+        int tombol = wgetch(rankWin);
+
+        if (tombol == 'q' || tombol == 'Q') {
+            break; // Keluar dari Papan Peringkat ke Menu Utama
+        } else if (tombol == 'c' || tombol == 'C') {
+            popupCariPemain();
+        } else if (tombol == KEY_UP) {
+            if (mulaiBaris > 0) {
+                mulaiBaris--;
+            }
+        } else if (tombol == KEY_DOWN) {
+            if (mulaiBaris + 10 < jumlahData) {
+                mulaiBaris++;
+            }
+        }
+    }
+
+    delwin(rankWin);
+}
