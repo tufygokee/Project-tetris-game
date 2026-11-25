@@ -935,3 +935,97 @@ int tampilMenuUtama() {
         }
     }
 }
+/*
+ =====================================================================
+ BAGIAN 10: FUNGSI UTAMA (int main)
+ =====================================================================
+ */
+
+int main() {
+    srand(time(0)); // Bibit angka acak agar bentuk & warna balok selalu beda
+
+    // Inisialisasi dasar ncurses 
+    initscr();
+    cbreak();
+    noecho();
+    curs_set(0);
+    keypad(stdscr, TRUE);
+    aturWarna();
+
+    bool berjalan = true;
+
+    while (berjalan) {
+        int pilihan = tampilMenuUtama();
+
+        switch (pilihan) {
+            case 1: // Mulai Baru
+                if (inputNamaBaru()) {
+                    mulaiGameTetris();
+                }
+                break;
+
+            case 2: // Main Lagi (langsung masuk ke game Tetris)
+                if (namaPemain == "") {
+                    namaPemain = pemainTerakhir;
+                }
+                mulaiGameTetris();
+                break;
+
+            case 3: // Papan Peringkat
+                tampilPapanPeringkat();
+                break;
+
+            case 4: // Keluar (atau menekan 'q' / 'Q')
+                berjalan = false;
+                break;
+        }
+    }
+/*
+ =====================================================================
+ BAGIAN 10: FUNGSI UTAMA (int main)
+ =====================================================================
+ */
+
+int main() {
+    srand(time(0)); // Bibit angka acak agar bentuk & warna balok selalu beda
+
+    // Inisialisasi dasar ncurses 
+    initscr();
+    cbreak();
+    noecho();
+    curs_set(0);
+    keypad(stdscr, TRUE);
+    aturWarna();
+
+    bool berjalan = true;
+
+    while (berjalan) {
+        int pilihan = tampilMenuUtama();
+
+        switch (pilihan) {
+            case 1: // Mulai Baru
+                if (inputNamaBaru()) {
+                    mulaiGameTetris();
+                }
+                break;
+
+            case 2: // Main Lagi (langsung masuk ke game Tetris)
+                if (namaPemain == "") {
+                    namaPemain = pemainTerakhir;
+                }
+                mulaiGameTetris();
+                break;
+
+            case 3: // Papan Peringkat
+                tampilPapanPeringkat();
+                break;
+
+            case 4: // Keluar (atau menekan 'q' / 'Q')
+                berjalan = false;
+                break;
+        }
+    }
+
+    endwin(); // Wajib dipanggil untuk mengembalikan terminal ke kondisi awal
+    return 0;
+}
