@@ -334,7 +334,8 @@ void hapusBaris() {
 
 // Menggambar arena Tetris di kiri dan papan info/kontrol di kanan
 void gambarGame(int rekorLama) {
-    clear();
+
+    erase();
 
     // Gambar bingkai arena Tetris (ukuran 20 baris x 10 kolom)
     attron(COLOR_PAIR(6));
@@ -675,9 +676,8 @@ void tampilPapanPeringkat() {
     int mulaiBaris = 0; // Untuk menggulir jika data lebih dari 10
 
     while (true) {
-        clear();
         refresh();
-        wclear(rankWin);
+        werase(rankWin);
         box(rankWin, 0, 0);
 
         wattron(rankWin, COLOR_PAIR(6) | A_BOLD);
@@ -765,7 +765,7 @@ bool inputNamaBaru() {
 
     // 1. Input nama langsung di dalam kotak ncurses (tidak keluar ke terminal)
     do {
-        wclear(inputWin);
+        werase(inputWin);
         box(inputWin, 0, 0);
 
         wattron(inputWin, COLOR_PAIR(6) | A_BOLD);
@@ -804,7 +804,7 @@ bool inputNamaBaru() {
     int pilih = 0; // Langsung menyorot tombol MULAI
 
     while (true) {
-        wclear(inputWin);
+         werase(inputWin);
         box(inputWin, 0, 0);
 
         wattron(inputWin, COLOR_PAIR(6) | A_BOLD);
@@ -885,7 +885,7 @@ int tampilMenuUtama() {
     int pilihanTerpilih = 0;
 
     while (true) {
-        wclear(menuWin);
+        werase(menuWin);
         box(menuWin, 0, 0);
 
         wattron(menuWin, COLOR_PAIR(6) | A_BOLD);
@@ -934,52 +934,7 @@ int tampilMenuUtama() {
                 return 4; // Keluar
         }
     }
-}
-/*
- =====================================================================
- BAGIAN 10: FUNGSI UTAMA (int main)
- =====================================================================
- */
 
-int main() {
-    srand(time(0)); // Bibit angka acak agar bentuk & warna balok selalu beda
-
-    // Inisialisasi dasar ncurses 
-    initscr();
-    cbreak();
-    noecho();
-    curs_set(0);
-    keypad(stdscr, TRUE);
-    aturWarna();
-
-    bool berjalan = true;
-
-    while (berjalan) {
-        int pilihan = tampilMenuUtama();
-
-        switch (pilihan) {
-            case 1: // Mulai Baru
-                if (inputNamaBaru()) {
-                    mulaiGameTetris();
-                }
-                break;
-
-            case 2: // Main Lagi (langsung masuk ke game Tetris)
-                if (namaPemain == "") {
-                    namaPemain = pemainTerakhir;
-                }
-                mulaiGameTetris();
-                break;
-
-            case 3: // Papan Peringkat
-                tampilPapanPeringkat();
-                break;
-
-            case 4: // Keluar (atau menekan 'q' / 'Q')
-                berjalan = false;
-                break;
-        }
-    }
 /*
  =====================================================================
  BAGIAN 10: FUNGSI UTAMA (int main)
