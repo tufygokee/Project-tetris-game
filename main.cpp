@@ -334,6 +334,7 @@ void hapusBaris() {
 
 // Menggambar arena Tetris di kiri dan papan info/kontrol di kanan
 void gambarGame(int rekorLama) {
+
     erase();
 
     // Gambar bingkai arena Tetris (ukuran 20 baris x 10 kolom)
@@ -554,7 +555,7 @@ void popupCariPemain() {
     int indeksKetemu = -1;
 
     while (true) {
-        werase(popupWin);
+        wclear(popupWin);
         box(popupWin, 0, 0);
 
         wattron(popupWin, COLOR_PAIR(6) | A_BOLD);
